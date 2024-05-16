@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gorilla Game</title>
+    <style>
+        .container {
+            display: flex;
+            justify-content: space-around;
+            margin-top: 50px;
+        }
+
+        .player1, .player2 {
+            text-align: center;
+        }
+
+        .object {
+            width: 20px;
+            height: 20px;
+            background-color: red;
+            position: absolute;
+            bottom: 50px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="player1">
+            <h2>Player 1</h2>
+            <input type="number" id="angle1" placeholder="Angle (degrees)" min="0" max="90">
+            <input type="number" id="force1" placeholder="Force" min="1" max="10">
+            <button onclick="throwObject(1)">Throw</button>
+        </div>
+        <div class="player2">
+            <h2>Player 2</h2>
+            <input type="number" id="angle2" placeholder="Angle (degrees)" min="0" max="90">
+            <input type="number" id="force2" placeholder="Force" min="1" max="10">
+            <button onclick="throwObject(2)">Throw</button>
+        </div>
+        <div class="object" id="object"></div>
+    </div>
+    <script>
+        function throwObject(player) {
+            let angle = (player === 1) ? document.getElementById("angle1").value : document.getElementById("angle2").value;
+            let force = (player === 1) ? document.getElementById("force1").value : document.getElementById("force2").value;
+            
+            let object = document.getElementById("object");
+            object.style.bottom = "50px"; // Reset object's position
+
+            let initialVelocityX = force * Math.cos(angle * Math.PI / 180);
+            let initialVelocityY = force * Math.sin(angle * Math.PI / 180);
+
+            let time = 0;
+            let gravity = 9.8;
+            let interval = setInterval(() => {
+                let positionX = initialVelocityX * time;
+                let positionY = initialVelocityY * time - 0.5 * gravity * time * time;
+
+                object.style.left = positionX + "px";
+                object.style.bottom = positionY + "px";
+
+                time += 0.1;
+                
+                if (positionY <= 0) {
+                    clearInterval(interval);
+                }
+            }, 100);
+        }
+    </script>
+</body>
+</html>
